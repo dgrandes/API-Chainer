@@ -1,0 +1,8 @@
+{
+	"name":"dummy_data_type",
+	"description":"im a dummy",
+	"properties":{
+		"first_property":"Integer",
+		"second_property":"String"
+	}
+}
