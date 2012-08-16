@@ -4,7 +4,7 @@
 
 # Home page
 GET     /                           controllers.Application.index
-GET		/data/search/:query		  	controllers.Data.search(query: String)
+GET		/data/search/ 		  	    controllers.Data.search
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

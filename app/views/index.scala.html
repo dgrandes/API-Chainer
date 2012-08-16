@@ -1,4 +1,7 @@
-@()
+@(myForm: Form[String])
+
+@import helper._
+@import helper.twitterBootstrap._
 
 @main("API-Chainer") {
 	<div class="navbar navbar-fixed-top">
@@ -17,12 +20,14 @@
     	<div class="hero-unit">
 	    	<h1>API Chainer</h1>
 	    	<p>Chain APIs together and thunderbolt the clouds!</p>
-	    	<div id="searchContainer">
-			    <form>
-			    	<label for="query">Data Type:</label>
-			        <input id="query" name="field" type="text" />
-			    </form>
-			</div>
+	    	@helper.form(action=routes.Data.search, 'id -> "searchContainer"){
+	    		@inputText(
+	    			myForm("query"),
+	    			'_label -> "Data Type",
+	    			'_help -> "Please choose a data type."
+	    		)
+		    }
+		    <p><div id="output"></div></p>
     	</div>
     </div>
 }
