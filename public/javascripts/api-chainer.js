@@ -1103,6 +1103,29 @@ function log() {
 
 })(jQuery);
 
+function displayDataType(divId, responseText){
+    $('#'+divId).html('');
+    if(typeof responseText['error'] !== 'undefined'){
+        $("#"+divId).text(responseText["message"]);
+    }else{
+        $("#"+divId).append("Data Type Found:<ul>");
+        for(var property in responseText){
+            var value = responseText[property];
+            if(typeof value !== "object")
+                $('#'+divId+' ul').append('<li>'+property+" : "+responseText[property]+'</li>');
+            else{
+                $('#'+divId+' ul').append("<li>Element Properties:");
+                $('#'+divId+' ul').append("<ul>");
+                for(var subprop in value){
+                    $('#'+divId+' ul ul').append('<li>'+subprop+" : "+value[subprop]+'</li>');   
+                }
+                $("#"+divId).append("</ul></li>");
+            }
+        }
+        $("#"+divId).append('</ul>');
+    }
+}
+
 // pre-submit callback 
 function showRequest(formData, jqForm, options) { 
     // formData is an array; here we use $.param to convert it to a string to display it 
@@ -1132,27 +1155,7 @@ function showResponse(responseText, statusText, xhr, $form)  {
     // if the ajaxForm method was passed an Options Object with the dataType 
     // property set to 'json' then the first argument to the success callback 
     // is the json data object returned by the server 
-    $("#output").html('');
-    if(typeof responseText['error'] !== 'undefined'){
-        $("#output").text(responseText["message"]);
-    }else{
-        $('#output').append("Data Type Found:<ul>");
-        $('#output ul').append('<br/>');
-        for(var property in responseText){
-            var value = responseText[property];
-            if(typeof value !== "object")
-                $('#output ul').append('<li>'+property+" : "+responseText[property]+'</li>');
-            else{
-                $('#output ul').append("<li>Element Properties:");
-                $('#output ul').append("<ul>");
-                for(var subprop in value){
-                    $('#output ul ul').append('<li>'+subprop+" : "+value[subprop]+'</li>');   
-                }
-                $('#output').append("</ul></li>");
-            }
-        }
-        $('#output').append('</ul>');
-    }
+    displayDataType("output", responseText);
 
 } 
 

@@ -5,13 +5,25 @@ import play.api.mvc._
 import play.api.data._
 import play.api.data.Forms._
 
+val chainForm = Form(
+	single(
+		"link" -> text
+		)
+	)
 object Data extends Controller {
   
+  	val data = new Data()
 	def search() = Action { implicit request => {
 	  	val query = Application.queryForm.bindFromRequest.get
-	  	val data = new Data()
 	    Ok(data.search(query))
 	  }
+    }
+
+    def chain() = Action { implicit => {
+    		val link = chainForm.bindFromRequest.get
+    		Ok(data.chain(link))
+    	}
+
     }
   
   
@@ -31,5 +43,9 @@ class Data {
 		}catch{
 			case fnfe: java.io.FileNotFoundException => return Response.error("unknown data type!");
 		}
+	}
+
+	def chain(link: String) = {
+		val cookie :Option[Cookie] = Cookies.get("chain")
 	}
 }
