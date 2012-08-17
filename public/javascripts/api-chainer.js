@@ -1132,22 +1132,23 @@ function showResponse(responseText, statusText, xhr, $form)  {
     // if the ajaxForm method was passed an Options Object with the dataType 
     // property set to 'json' then the first argument to the success callback 
     // is the json data object returned by the server 
-    if(typeof responseText['error'] !== 'undefined')
+    $("#output").html('');
+    if(typeof responseText['error'] !== 'undefined'){
         $("#output").text(responseText["message"]);
-    else{
-        $('#output').text();
-        $('#output').prepend("<ul>");
-        $('#output').append('<br/>');
+    }else{
+        $('#output').append("Data Type Found:<ul>");
+        $('#output ul').append('<br/>');
         for(var property in responseText){
             var value = responseText[property];
             if(typeof value !== "object")
-                $('#output').append('<li>'+property+" : "+responseText[property]+'</li>');
+                $('#output ul').append('<li>'+property+" : "+responseText[property]+'</li>');
             else{
-                $('#output').append("Element Properties: {<br/> ");
+                $('#output ul').append("<li>Element Properties:");
+                $('#output ul').append("<ul>");
                 for(var subprop in value){
-                    $('#output').append('-'+subprop+" : "+value[subprop]+'</li><br/>');   
+                    $('#output ul ul').append('<li>'+subprop+" : "+value[subprop]+'</li>');   
                 }
-                $('#output').append("}");
+                $('#output').append("</ul></li>");
             }
         }
         $('#output').append('</ul>');
