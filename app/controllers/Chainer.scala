@@ -7,9 +7,9 @@ import play.api.data._
 import play.api.data.Forms._
 
 
-object Data extends Controller {
+object Chainer extends Controller {
   
-  	val data = new Data()
+  	val chainer = new Chainer()
 
   	val chainForm = Form(
 	single(
@@ -19,17 +19,17 @@ object Data extends Controller {
 
 	def search() = Action { implicit request => {
 	  	val query = Application.queryForm.bindFromRequest.get
-	    Ok(data.search(query))
+	    Ok(chainer.search(query))
 	  }
     }
 
     def chain() = Action { implicit request => {
     		val link = chainForm.bindFromRequest.get
     		val chain = request.cookies.get("chain") match{
-    			case Some(cookie) => data.parseChain(cookie.value)
+    			case Some(cookie) => chainer.parseChain(cookie.value)
     			case None =>  List()
     		}
-    		Ok(data.chain(chain, link))
+    		Ok(chainer.chain(chain, link))
     	}
 
     }
@@ -37,29 +37,32 @@ object Data extends Controller {
   
 }
 
-class Data {
+class Chainer {
 
-	val data_path = "app/data/data_types/";
+	val data_path = "app/data/data_types/"
+	val api_calls_path = "app/data/api_calls"
 
 	def search(query: String) : String = {
+		searchDataType(query) match  {
+			case Some(q) => return q
+			case None => return Response.error("unknown data type!");
+		}
+	}
 
+	def searchDataType(query: String) : Option[String] = {
 		val filename = data_path+query+".json"
-
 		try{
-			return scala.io.Source.fromFile(filename).mkString
+			return Option(scala.io.Source.fromFile(filename).mkString)
 		}catch{
-			case fnfe: java.io.FileNotFoundException => return Response.error("unknown data type!");
+			case fnfe: java.io.FileNotFoundException => return None
 		}
 	}
 
 
 	def parseChain(chain: String) : List[String] = {
-				
 		val index = chain.indexOfSlice("->")
-
 		if(index < 0)
 			return List(chain)
-
 		return chain.slice(0,index) :: parseChain(chain.slice(index+2, chain.length))
 		
 	}

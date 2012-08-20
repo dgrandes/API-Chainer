@@ -4,8 +4,8 @@
 
 # Home page
 GET     /                           controllers.Application.index
-GET		/data/search/ 		  	    controllers.Data.search
-GET		/data/chain					controllers.Data.chain
+GET		/chainer/search 		  	    controllers.Chainer.search
+GET		/chainer/chain					controllers.Chainer.chain
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
